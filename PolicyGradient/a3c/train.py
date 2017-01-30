@@ -13,12 +13,12 @@ import multiprocessing
 
 from inspect import getsourcefile
 current_path = os.path.dirname(os.path.abspath(getsourcefile(lambda:0)))
-import_path = os.path.abspath(os.path.join(current_path, "../.."))
+import_path = os.path.abspath(os.path.join(current_path, "../../"))
 
-if import_path not in sys.path:
-  sys.path.append(import_path)
+# if import_path not in sys.path:
+  # sys.path.append(import_path)
 
-from lib.atari import helpers as atari_helpers
+import helpers as atari_helpers
 from estimators import ValueEstimator, PolicyEstimator
 from policy_monitor import PolicyMonitor
 from worker import Worker
@@ -64,7 +64,7 @@ if FLAGS.reset:
 if not os.path.exists(CHECKPOINT_DIR):
   os.makedirs(CHECKPOINT_DIR)
 
-summary_writer = tf.summary.FileWriter(os.path.join(MODEL_DIR, "train"))
+summary_writer = tf.train.SummaryWriter(os.path.join(MODEL_DIR, "train"))
 
 with tf.device("/cpu:0"):
 
@@ -111,7 +111,7 @@ with tf.device("/cpu:0"):
     saver=saver)
 
 with tf.Session() as sess:
-  sess.run(tf.global_variables_initializer())
+  sess.run(tf.initialize_all_variables())
   coord = tf.train.Coordinator()
 
   # Load a previous checkpoint if it exists

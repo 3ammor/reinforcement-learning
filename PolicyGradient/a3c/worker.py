@@ -14,8 +14,8 @@ if import_path not in sys.path:
   sys.path.append(import_path)
 
 # from lib import plotting
-from lib.atari.state_processor import StateProcessor
-from lib.atari import helpers as atari_helpers
+from state_processor import StateProcessor
+import helpers as atari_helpers
 from estimators import ValueEstimator, PolicyEstimator
 
 Transition = collections.namedtuple("Transition", ["state", "action", "reward", "next_state", "done"])
@@ -164,7 +164,7 @@ class Worker(object):
     # If we episode was not done we bootstrap the value from the last state
     reward = 0.0
     if not transitions[-1].done:
-      reward = self._value_net_predict(transitions[-1].next_state, sess)
+      reward = self._value_net_predict(transitions[-1].state, sess)
 
     # Accumulate minibatch exmaples
     states = []
